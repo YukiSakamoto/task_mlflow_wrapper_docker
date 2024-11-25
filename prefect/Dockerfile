@@ -1,0 +1,7 @@
+FROM python:3.11
+WORKDIR /prefect
+#RUN pip install --upgrade pip
+COPY requirements.txt .
+RUN pip install --progress-bar off --upgrade pip
+RUN pip install --progress-bar off -r requirements.txt
+CMD ["prefect", "server", "start","--host=0.0.0.0"]
