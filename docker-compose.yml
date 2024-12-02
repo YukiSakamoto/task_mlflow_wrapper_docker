@@ -1,4 +1,4 @@
-version: "3.8"
+#version: "3.8"
 services:
     mlflow:
         build: 
@@ -6,10 +6,16 @@ services:
             dockerfile: Dockerfile
         container_name: mlflow
         ports: 
-          - "7777:7777"
-        command: mlflow server --host=0.0.0.0
+          - 7777:7777
+        environment:
+            HOST_IP: "0.0.0.0"
+        command: mlflow server --host=${HOST_IP} --port=7777
     prefect: 
         image: prefecthq/prefect:2.20-python3.11
         ports:
-            - 4200:4200
-        command: prefect server start
+            - "4200:4200"
+        environment:
+            HOST_IP: "0.0.0.0"
+        depends_on:
+            - mlflow
+        command: prefect server start --host=${HOST_IP} --port=4200
